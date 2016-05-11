@@ -24,31 +24,34 @@ USER="max"   # can be overriden with the -u argument
 # router to glean arp/nd bindings from
 ROUTER=$(cat ${CONFIG} | shyaml get-value router)
 
-# XXX - add command line args to modify this
-# XXX - specify a config file to reference other than the dfault.
-# XXX - specify a user to check within the config
-# while [[ $# > 0 ]]
-# do
-#   KEY="$1"
-#
-#   case "${KEY}" in
-#     -c|--config)
-#       shift
-#       ;;
-#     -u|--user)
-#       shift
-#       ;;
-#     *)  # no options specified
-#       ;;
-#   esac
-#   shift
-# done
+while [[ $# > 0 ]]
+do
+  KEY="$1"
+
+  case "${KEY}" in
+  -c|--config)
+    CONFIG=$2
+    shift
+    ;;
+  -u|--user)
+    USER=$2
+    shift
+    ;;
+  -r|--router)
+    ROUTER=$2
+    shift
+    ;;
+  *)  # no options specified
+    ;;
+  esac
+  shift
+done
 
 
 
 # wrap the MACLIST in an array.  shyaml doesn't deal with the nested values
 # per se, so you need to scrub them a bit if you're not directly gettig the
-# leaf value.  hence, the sed to strip
+# leaf value.  hence, the sed to strip.
 MACLIST=($(cat ${CONFIG} | shyaml get-value users.${USER} | sed 's/\-//g'))
 
 # get the current bindings from router  for all address families

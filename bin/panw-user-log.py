@@ -47,16 +47,23 @@ def main(args):
     login = []                 # list of entries to generate login events for
     logout = []                # ibid, but logout events
 
-    for u in config["users"]:
-        maclist = config["users"][u]
-        (entry_login, entry_logout) = parse_addr_binding(u, maclist, cachedir)
+    if args.user:
+        maclist = config["users"][args.user]
+        (entry_login, entry_logout) = parse_addr_binding(args.user, maclist,
+                                                         cachedir)
         if entry_login:
             login += entry_login                  # merge, don't append
         if entry_logout:
             logout += entry_logout
-
-    # print 'in:', login
-    # print 'out:', logout
+    else:
+        for u in config["users"]:
+            maclist = config["users"][u]
+            (entry_login, entry_logout) = parse_addr_binding(u,
+                                                             maclist, cachedir)
+            if entry_login:
+                login += entry_login
+            if entry_logout:
+                logout += entry_logout
 
     e_temp = Template(entry_txt)
     ublock = Template(userid_block)
@@ -82,6 +89,7 @@ def main(args):
 def generate_entries(elist, template):
     """ elist: list of entries to be put into the associated template for
     replacement
+
     template: a template object to do the associated replacement in
 
     returns: string with the associated replacements in place.
@@ -113,7 +121,9 @@ def parse_addr_binding(user, maclist, cachedir):
     maclogin = []
     maclogout = []
 
-    skip_re = re.compile("^dts:|fe80")
+    # strip out the fields we're not interested in as well as link local IPv6
+    # addresses
+    skip_re = re.compile("^(dts|fe80)")
     ip_entry_re = re.compile("(.*) dev (.*) lladdr (.*) (.*)")
 
     for mac in maclist:

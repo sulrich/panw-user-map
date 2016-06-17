@@ -1,0 +1,15 @@
+---
+firewall: sulrich-pa200.botwerks.net
+router: 10.0.0.1
+adj_cmd: "ip neighbor show | grep %%MACADDR%%"
+api_tag: test
+cache_dir: /tmp
+users:
+  max:
+    - 30:10:e4:70:5a:2a  # test ipad
+    - 5C:97:F3:1D:01:6E  # max iphone
+    - B8:8D:12:0F:E3:04  # max laptop
+  bunbun:
+    - 66:97:F3:1D:01:6E  # max iphone
+    - 66:8D:12:0F:E3:04  # max laptop
+    - 66:10:e4:70:5a:2a  # test ipad

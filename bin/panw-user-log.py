@@ -9,7 +9,12 @@ import re
 import sys
 from string import Template
 
+# template string to be used for user-ip addr mappings and fed to the PAN-OS
+# API
 entry_txt = '<entry name="$user" ip="$ip_addr"/>\n'
+
+# template string for the XML API submission.  entries for login/logout events
+# are placed in the respective locations.
 userid_block = """
 <uid-message>
 <type>update</type>
@@ -25,22 +30,16 @@ $lout
 
 
 def main(args):
-    """
-
-    :args: TODO
-    :returns: TODO
-
-    """
     panw_user_config = os.environ['HOME'] + "/.config/users-panw.yaml"
-
     if args.config:
         panw_user_config = args.config
 
     try:
         with open(panw_user_config, 'r') as c:
             config = yaml.load(c)
-    except Exception:
-        print "ERROR: unable to open config file (%s)" % panw_user_config
+    except Exception as e:
+        print "ERROR: unable to open config file: ", panw_user_config
+        print "exception: ", e
 
     cachedir = config["cache_dir"]
 
@@ -110,13 +109,17 @@ def parse_addr_binding(user, maclist, cachedir):
 
     returns: list of strings with the entries for insertion into the user-id
     update process.  this list should be appended to the running collection of
-    userid/mac addr bindings that
+    userid/mac addr bindings that will be processed to set the user binding on
+    the firewall.
 
     """
 
     # for each mac address in the list parse the associated arp/nd cache file
     # and return the entries for the login and logout stanza. logout the STALE
     # entries, login the REACHABLE entries
+    #
+    # note: this assumes linux ip command output. needs to be adjusted for
+    # other gleaning methods.
 
     maclogin = []
     maclogout = []

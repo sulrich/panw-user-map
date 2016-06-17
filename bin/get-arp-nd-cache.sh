@@ -20,7 +20,7 @@
 
 # $ROUTER - take the necessary precautions to secure access to this device
 CONFIG="${HOME}/.config/users-panw.yaml"
-USER="max"   # can be overriden with the -u argument
+USER="max" # can be overriden with the -u argument, poor little dude. sigh ...
 # router to glean arp/nd bindings from
 ROUTER=$(cat ${CONFIG} | shyaml get-value router)
 
@@ -46,8 +46,6 @@ do
   esac
   shift
 done
-
-
 
 # wrap the MACLIST in an array.  shyaml doesn't deal with the nested values
 # per se, so you need to scrub them a bit if you're not directly gettig the

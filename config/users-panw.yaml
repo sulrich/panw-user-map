@@ -6,10 +6,9 @@ api_tag: test
 cache_dir: /tmp
 users:
   max:
-    - 30:10:e4:70:5a:2a  # test ipad
-    - 5C:97:F3:1D:01:6E  # max iphone
-    - B8:8D:12:0F:E3:04  # max laptop
+    - 30:10:e4:70:5a:2a  # max ipad
+    - 5C:97:F3:1D:01:6E  # max laptop
   bunbun:
-    - 66:97:F3:1D:01:6E  # max iphone
-    - 66:8D:12:0F:E3:04  # max laptop
-    - 66:10:e4:70:5a:2a  # test ipad
+    - 66:97:F3:1D:01:6E  # bunbun iphone
+    - 66:8D:12:0F:E3:04  # bunbun laptop
+    - 66:10:e4:70:5a:2a  # household ipad
